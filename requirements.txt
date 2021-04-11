@@ -1,0 +1,11 @@
+numpy
+pandas
+matplotlib
+seaborn
+streamlit
+logging
+altair
+gensim
+sumy
+gensim_sum_ext
+rouge

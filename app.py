@@ -27,8 +27,8 @@ import altair as alt
 
 # Fxn for LexRank Summarization
 # Function for Sumy Summarization
-def sumy_summarizer(docx,num=2):
-    parser = PlaintextParser.from_string(docx,Tokenizer("english"))
+def sumy_summarizer(docx,language,num=2):
+    parser = PlaintextParser.from_string(docx,Tokenizer(language))
     lex_summarizer = LexRankSummarizer()
     summary = lex_summarizer(parser.document,num)
     summary_list = [str(sentence) for sentence in summary]
@@ -54,6 +54,10 @@ def main():
     
     if choice == 'Home':
         st.subheader('Summarization')
+
+        language = ['Portuguese', 'English']
+        currentLanguage = st.sidebar.selectbox('Language', language)
+
         raw_text = st.text_area('Enter Text Here')
         if st.button('Summarize'):
             
@@ -65,7 +69,7 @@ def main():
 
             with c1:
                 with st.beta_expander('LexRank Summary'):
-                    my_summary = sumy_summarizer(raw_text,5)
+                    my_summary = sumy_summarizer(raw_text, currentLanguage, 5)
                     document_len = {
                         "Original": len(raw_text), 
                         'Summary': len(my_summary)
