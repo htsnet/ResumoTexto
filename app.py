@@ -18,12 +18,19 @@ from rouge import Rouge
 # EDA pkgs
 import pandas as pd
 
-# Data visualization
-import matplotlib.pyplot as plt
-import matplotlib
-matplotlib.use('Agg') # TkAgg # Backend
-
 import altair as alt
+
+# Configuração inicial da página
+st.set_page_config(page_title='NLP: Resumo de Textos', page_icon='favicon.ico', layout='centered', )
+
+#para esconder o menu do próprio streamlit 
+hide_streamlit_style = """
+<style>
+#MainMenu {visibility: hidden;}
+footer {visibility: hidden;}
+</style>
+
+"""
 
 # Fxn for LexRank Summarization
 # Function for Sumy Summarization
@@ -56,7 +63,7 @@ def main():
         st.subheader('Summarization')
 
         language = ['Portuguese', 'English']
-        currentLanguage = st.sidebar.selectbox('Language', language)
+        currentLanguage = st.selectbox('Language', language)
 
         raw_text = st.text_area('Enter Text Here')
         if st.button('Summarize'):

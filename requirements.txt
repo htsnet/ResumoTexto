@@ -1,11 +1,11 @@
 numpy
 pandas
-matplotlib
+#matplotlib
 seaborn
 #streamlit
-logging
+#logging
 altair
-#gensim
+gensim
 sumy
 gensim_sum_ext
 rouge
