@@ -63,7 +63,7 @@ def main():
         st.subheader('Summarization')
 
         language = ['Portuguese', 'English']
-        currentLanguage = st.selectbox('Language', language)
+        currentLanguage = st.selectbox('Language', language).lower()
 
         raw_text = st.text_area('Enter Text Here')
         if st.button('Summarize'):
