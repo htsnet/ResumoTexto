@@ -13,6 +13,8 @@ from sumy.nlp.tokenizers import Tokenizer
 from sumy.summarizers.lex_rank import LexRankSummarizer
 import nltk
 
+nltk.download('punkt')
+
 # evaluate summay
 from rouge import Rouge
 
