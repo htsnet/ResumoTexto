@@ -2,7 +2,7 @@
 import streamlit as st
 
 # additional pkgs / summarization pkgs
-# need: pip install gensim sumy gensim_sum_ext pandas altair seaborn rouge
+# need: pip install gensim sumy gensim_sum_ext pandas altair seaborn rouge nltk
 
 # TextRank Algorithm
 from gensim.summarization import summarize
@@ -11,6 +11,7 @@ from gensim.summarization import summarize
 from sumy.parsers.plaintext import PlaintextParser
 from sumy.nlp.tokenizers import Tokenizer
 from sumy.summarizers.lex_rank import LexRankSummarizer
+import nltk
 
 # evaluate summay
 from rouge import Rouge
