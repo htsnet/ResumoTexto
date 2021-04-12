@@ -13,7 +13,7 @@ from sumy.nlp.tokenizers import Tokenizer
 from sumy.summarizers.lex_rank import LexRankSummarizer
 import nltk
 
-nltk.download('punkt')
+nltk.download('punkt', 'stopwords')
 
 # evaluate summay
 from rouge import Rouge
@@ -29,6 +29,7 @@ import json
 currenteCodeLanguage = 'pt'
 language = ['Português', 'English']
 codes = {'português': 'pt', 'english': 'en'}
+languageNltk = {'português': 'portuguese', 'english': 'english'}
 
 with open('translation.json', 'r', encoding='UTF-8') as j:
     json_dictionary = json.load(j)
@@ -88,7 +89,10 @@ def main():
         st.subheader(translate('resumo'))
 
         raw_text = st.text_area(translate('cole'), height=50)
-        textLanguage = st.radio(translate('escolhaTexto'), language).lower()
+        textLanguageChoose = st.radio(translate('escolhaTexto'), language).lower()
+        #print(textLanguageChoose)
+        textLanguage = languageNltk[textLanguageChoose]
+        #print(textLanguage)
         qtdeFrases = st.slider(translate('qtdeFrases'), 3, 200, 5) 
 
         #só mostra se tem conteúdo
