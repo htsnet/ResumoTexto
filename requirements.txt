@@ -1,6 +1,6 @@
 rouge==1.0.0
 streamlit==0.80.0
-gensim==4.0.1
+gensim==3.8.3
 altair==4.1.0
 pandas==1.2.3
 sumy==0.8.1
