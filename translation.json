@@ -1,0 +1,26 @@
+{
+    "pt": {
+        "titulo": "NLP: Resumo de Textos",
+        "nome": "Resumo de textos usando NLP",
+        "escolha": "Escolha a língua da tela",
+        "escolhaTexto": "Escolha a língua do texto",
+        "lingua": "Português",
+        "resumo": "Resumo",
+        "cole": "Cole seu texto na caixa abaixo",
+        "executar": "Executar",
+        "vazio": "O texto para resumir está vazio",
+        "qtdeFrases": "Quantidade máxima de frases no resumo"
+    },
+    "en": {
+        "titulo": "NLP: Text Summarization",
+        "nome": "Text summarization using NLP",
+        "escolha": "Choose screen language",
+        "escolhaTexto": "Choose text language",
+        "lingua": "English",
+        "resumo": "Summarization",
+        "cole": "Paste your text in the box below",
+        "executar": "Run",
+        "vazio": "The summary text is empty",
+        "qtdeFrases": "Maximum number of sentences in the summary"
+    }
+}
