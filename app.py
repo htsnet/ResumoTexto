@@ -30,6 +30,7 @@ currenteCodeLanguage = 'pt'
 language = ['Português', 'English']
 codes = {'português': 'pt', 'english': 'en'}
 languageNltk = {'português': 'portuguese', 'english': 'english'}
+raw_text = ''
 
 with open('translation.json', 'r', encoding='UTF-8') as j:
     json_dictionary = json.load(j)
@@ -92,6 +93,7 @@ def main():
     choice = st.sidebar.selectbox('Menu', menu)
     
     if choice == 'Home':
+        conteudo = ''
         st.subheader(translate('textoOriginal'))
 
         arquivo = st.file_uploader(translate('arraste'),
@@ -102,16 +104,15 @@ def main():
             # read the content
             #st.write(type(arquivo))
             #st.write(dir(arquivo))
-            arquivoPDF = PyPDF2.PdfFileReader(arquivo)
-            conteudo = ''
+            arquivoPDF = PyPDF2.PdfFileReader(arquivo, strict=False)
             for i  in range(0, arquivoPDF.getNumPages()):
                 pagina = arquivoPDF.getPage(i)
                 conteudo += pagina.extractText()
             raw_text = conteudo
-            print(conteudo)
+            #print(conteudo)
 
         st.write(translate('ou'))
-        raw_text = st.text_area(translate('cole'), height=300, value=raw_text)
+        raw_text = st.text_area(translate('cole'), height=300, value=conteudo)
         textLanguageChoose = st.radio(translate('escolhaTexto'), language).lower()
         #print(textLanguageChoose)
         textLanguage = languageNltk[textLanguageChoose]
