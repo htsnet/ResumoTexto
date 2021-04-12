@@ -9,7 +9,11 @@
         "cole": "Cole seu texto na caixa abaixo",
         "executar": "Executar",
         "vazio": "O texto para resumir está vazio",
-        "qtdeFrases": "Quantidade máxima de frases no resumo"
+        "qtdeFrases": "Quantidade máxima de frases no resumo (apenas para método 1)",
+        "textoOriginal": "Texto original",
+        "metodo1": "Método 1: LexRank",
+        "metodo2": "Método 2: TextRank",
+        "caracteres": "caracteres"
     },
     "en": {
         "titulo": "NLP: Text Summarization",
@@ -21,6 +25,10 @@
         "cole": "Paste your text in the box below",
         "executar": "Run",
         "vazio": "The summary text is empty",
-        "qtdeFrases": "Maximum number of sentences in the summary"
+        "qtdeFrases": "Maximum number of sentences in the summary (for method 1 only)",
+        "textoOriginal": "Original text",
+        "metodo1": "Method 1: LexRank",
+        "metodo2": "Method 2: TextRank",
+        "caracteres": "characters"
     }
 }

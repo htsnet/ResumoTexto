@@ -86,9 +86,9 @@ def main():
     choice = st.sidebar.selectbox('Menu', menu)
     
     if choice == 'Home':
-        st.subheader(translate('resumo'))
+        st.subheader(translate('textoOriginal'))
 
-        raw_text = st.text_area(translate('cole'), height=50)
+        raw_text = st.text_area(translate('cole'), height=300)
         textLanguageChoose = st.radio(translate('escolhaTexto'), language).lower()
         #print(textLanguageChoose)
         textLanguage = languageNltk[textLanguageChoose]
@@ -101,58 +101,46 @@ def main():
             # só executa se tiver texto
             if len(raw_text) > 0:
             
-                with st.beta_expander('Original Text'):
+                with st.beta_expander(translate('textoOriginal') + " (" + str(len(raw_text)) + " " + translate('caracteres')  + ")"):
                     st.write(raw_text)
 
                 # layout
                 c1, c2 = st.beta_columns(2)
 
                 with c1:
-                    with st.beta_expander('LexRank Summary'):
-                        my_summary = sumy_summarizer(raw_text, textLanguage, qtdeFrases)
-                        document_len = {
-                            "Original": len(raw_text), 
-                            'Summary': len(my_summary)
-                            }
-                        st.write(document_len)
+                    my_summary = sumy_summarizer(raw_text, textLanguage, qtdeFrases)
+                    with st.beta_expander(translate('metodo1') + " (" + str(len(my_summary)) + " " + translate('caracteres')  + ")"):
                         st.write(my_summary)
-
-                        st.info("Rouge Score")
-                        eval_df = evaluate_summary(my_summary, raw_text)
-                        st.dataframe(eval_df.T)
-                        eval_df['metrics'] = eval_df.index
-                        c = alt.Chart(eval_df).mark_bar().encode(
-                            x = 'metrics',
-                            y = 'rouge-1'
-                        )
-                        st.altair_chart(c)
-
-                        
-
+                        # st.info("Rouge Score")
+                        # eval_df = evaluate_summary(my_summary, raw_text)
+                        # st.dataframe(eval_df.T)
+                        # eval_df['metrics'] = eval_df.index
+                        # c = alt.Chart(eval_df).mark_bar().encode(
+                        #     x = 'metrics',
+                        #     y = 'rouge-1'
+                        # )
+                        # st.altair_chart(c)
                 with c2:
-                    with st.beta_expander('TextRank Summary'):
-                        # para o caso de texto muito pequeno
-                        try:
-                            my_summary = summarize(raw_text)
-                            document_len = {
-                                "Original": len(raw_text), 
-                                'Summary': len(my_summary)
-                                }
-                            st.write(document_len)
-                            st.write(my_summary)
+                    # para o caso de texto muito pequeno, avalia o resultado antes de mostrar
+                    try:
+                        my_summary = summarize(raw_text)
+                        textoAdicional = ""
+                        # st.info("Rouge Score")
+                        # eval_df = evaluate_summary(my_summary, raw_text)
+                        # st.dataframe(eval_df)
+                        # eval_df['metrics'] = eval_df.index
+                        # c = alt.Chart(eval_df).mark_bar().encode(
+                        #     x = 'metrics',
+                        #     y = 'rouge-1'
+                        # )
+                        # st.altair_chart(c)
+                    except:
+                        my_summary = raw_text
+                        textoAdicional = "Texto original mantido"
 
-                            st.info("Rouge Score")
-                            eval_df = evaluate_summary(my_summary, raw_text)
-                            st.dataframe(eval_df)
-                            eval_df['metrics'] = eval_df.index
-                            c = alt.Chart(eval_df).mark_bar().encode(
-                                x = 'metrics',
-                                y = 'rouge-1'
-                            )
-                            st.altair_chart(c)
-                        except:
-                            st.write(raw_text)
-                            st.info("Texto original mantido")
+                    with st.beta_expander(translate('metodo2') + " (" + str(len(my_summary)) + " " + translate('caracteres')  + ") " + textoAdicional ):
+                        st.write(my_summary)
+                        
             else:
                 st.error(translate('vazio'))
     else:
