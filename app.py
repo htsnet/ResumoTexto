@@ -1,8 +1,9 @@
 # import Core Pkg
 import streamlit as st
+import streamlit.components.v1 as stc
 
 # additional pkgs / summarization pkgs
-# need: pip install gensim sumy gensim_sum_ext pandas altair seaborn rouge nltk
+# need: pip install gensim sumy gensim_sum_ext pandas altair seaborn rouge nltk PyPDF2
 
 # TextRank Algorithm
 from gensim.summarization import summarize
@@ -20,10 +21,9 @@ from rouge import Rouge
 
 # EDA pkgs
 import pandas as pd
-
 import altair as alt
-
 import json
+import PyPDF2
 
 # valores iniciais ou fixos
 currenteCodeLanguage = 'pt'
@@ -51,8 +51,15 @@ hide_streamlit_style = """
 #MainMenu {visibility: hidden;}
 footer {visibility: hidden;}
 </style>
-
 """
+# Configuração inicial da página
+st.set_page_config(page_title=translate('titulo'), page_icon='favicon.png', layout='centered', )
+
+# passa javascript e estilos
+#stc.html('<script src="https://code.iconify.design/1/1.0.7/iconify.min.js"></script>')
+stc.html(hide_streamlit_style)
+st.markdown(hide_streamlit_style, unsafe_allow_html=True)
+
 
 # Fxn for LexRank Summarization
 # Function for Sumy Summarization
@@ -72,8 +79,7 @@ def evaluate_summary(summary,reference):
     eval_score_df = pd.DataFrame(eval_score[0])
     return eval_score_df
 
-# Configuração inicial da página
-st.set_page_config(page_title=translate('titulo'), page_icon='favicon.png', layout='centered', )
+
 
 def main():
     global currenteCodeLanguage
@@ -88,7 +94,24 @@ def main():
     if choice == 'Home':
         st.subheader(translate('textoOriginal'))
 
-        raw_text = st.text_area(translate('cole'), height=300)
+        arquivo = st.file_uploader(translate('arraste'),
+            #type=['pdf', 'doc', 'txt', 'docx']
+            type=['pdf']
+        )
+        if arquivo is not None:
+            # read the content
+            #st.write(type(arquivo))
+            #st.write(dir(arquivo))
+            arquivoPDF = PyPDF2.PdfFileReader(arquivo)
+            conteudo = ''
+            for i  in range(0, arquivoPDF.getNumPages()):
+                pagina = arquivoPDF.getPage(i)
+                conteudo += pagina.extractText()
+            raw_text = conteudo
+            print(conteudo)
+
+        st.write(translate('ou'))
+        raw_text = st.text_area(translate('cole'), height=300, value=raw_text)
         textLanguageChoose = st.radio(translate('escolhaTexto'), language).lower()
         #print(textLanguageChoose)
         textLanguage = languageNltk[textLanguageChoose]
@@ -138,7 +161,9 @@ def main():
                         my_summary = raw_text
                         textoAdicional = "Texto original mantido"
 
-                    with st.beta_expander(translate('metodo2') + " (" + str(len(my_summary)) + " " + translate('caracteres')  + ") " + textoAdicional ):
+                    with st.beta_expander(translate('metodo2') + " (" + str(len(my_summary)) + " " + translate('caracteres')  + ")"):
+                        if len(textoAdicional) > 0:
+                            st.info(textoAdicional)
                         st.write(my_summary)
                         
             else:

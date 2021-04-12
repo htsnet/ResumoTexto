@@ -13,7 +13,9 @@
         "textoOriginal": "Texto original",
         "metodo1": "Método 1: LexRank",
         "metodo2": "Método 2: TextRank",
-        "caracteres": "caracteres"
+        "caracteres": "caracteres",
+        "arraste": "Arraste e solte seu arquivo para este espaço",
+        "ou": "OU"
     },
     "en": {
         "titulo": "NLP: Text Summarization",
@@ -29,6 +31,8 @@
         "textoOriginal": "Original text",
         "metodo1": "Method 1: LexRank",
         "metodo2": "Method 2: TextRank",
-        "caracteres": "characters"
+        "caracteres": "characters",
+        "arraste": "Drag and drop your file into this space",
+        "ou": "OR"
     }
 }
