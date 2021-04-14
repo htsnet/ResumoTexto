@@ -36,6 +36,7 @@ import time
 from wordcloud import WordCloud
 import nltk
 from nltk import word_tokenize
+from nltk.corpus import stopwords
 nltk.download('punkt')
 nltk.download('stopwords')
 
