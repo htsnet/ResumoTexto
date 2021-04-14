@@ -25,8 +25,8 @@ import pandas as pd
 import altair as alt
 import json
 import PyPDF2
-from tika import parser
-import fitz # PyMuPDF
+#from tika import parser
+#import fitz # PyMuPDF
 
 # valores iniciais ou fixos
 currenteCodeLanguage = 'pt'
@@ -101,7 +101,7 @@ def main():
 
         arquivo = st.file_uploader(translate('arraste'),
             #type=['pdf', 'doc', 'txt', 'docx']
-            type=['pdf', 'txt']
+            type=['txt']
         )
         if arquivo is not None:
             # read the content
