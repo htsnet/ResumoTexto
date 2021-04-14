@@ -34,7 +34,6 @@ import base64
 import time
 
 from wordcloud import WordCloud
-from nltk.corpus import stopwords
 import nltk
 from nltk.corpus import stopwords
 from nltk import word_tokenize
