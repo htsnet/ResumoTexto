@@ -35,9 +35,9 @@ import time
 
 from wordcloud import WordCloud
 import nltk
-from nltk.corpus import stopwords
 from nltk import word_tokenize
 nltk.download('punkt')
+nltk.download('stopwords')
 
 timestr = time.strftime("%Y%m%d-%H%M%S%m")
 
