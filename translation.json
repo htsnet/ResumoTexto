@@ -16,7 +16,13 @@
         "caracteres": "caracteres",
         "arraste": "Arraste e solte seu arquivo para este espaço",
         "ou": "OU",
-        "tipoErrado": "O tipo de arquivo não é válido"
+        "tipoErrado": "O tipo de arquivo não é válido",
+        "removeNumeros": "Remove números",
+        "removeEspeciais": "Remove caracteres especiais (inclusive letras acentuadas)",
+        "removeUrls": "Remove links (URLs)",
+        "removeEmojis": "Remove emojis",
+        "download": "Baixar arquivo",
+        "clique": "Clique aqui"
     },
     "en": {
         "titulo": "NLP: Text Summarization",
@@ -35,6 +41,12 @@
         "caracteres": "characters",
         "arraste": "Drag and drop your file into this space",
         "ou": "OR",
-        "tipoErrado": "The file type is not valid"
+        "tipoErrado": "The file type is not valid",
+        "removeNumeros": "Remove numbers",
+        "removeEspeciais": "Removes special characters (including accented letters)",
+        "removeUrls": "Remove links (URLs)"        ,
+        "removeEmojis": "Remove emojis",
+        "download": "Download file",
+        "clique": "Click here"
     }
 }

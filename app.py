@@ -2,9 +2,12 @@
 from json import encoder
 import streamlit as st
 import streamlit.components.v1 as stc
+import matplotlib.pyplot as plt
+import matplotlib
+matplotlib.use("Agg")
 
 # additional pkgs / summarization pkgs
-# need: pip install gensim sumy gensim_sum_ext pandas altair seaborn rouge nltk PyPDF2 wordcloud
+# need: pip install gensim sumy gensim_sum_ext pandas seaborn rouge nltk PyPDF2 wordcloud neattext
 
 # TextRank Algorithm
 from gensim.summarization import summarize
@@ -22,11 +25,21 @@ from rouge import Rouge
 
 # EDA pkgs
 import pandas as pd
-import altair as alt
 import json
 import PyPDF2
-#from tika import parser
-#import fitz # PyMuPDF
+import neattext.functions as nfx
+
+# Text Downloader
+import base64
+import time
+
+from wordcloud import WordCloud
+from nltk.corpus import stopwords
+import nltk
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
+
+timestr = time.strftime("%Y%m%d-%H%M%S%m")
 
 # valores iniciais ou fixos
 currenteCodeLanguage = 'pt'
@@ -34,6 +47,7 @@ language = ['Português', 'English']
 codes = {'português': 'pt', 'english': 'en'}
 languageNltk = {'português': 'portuguese', 'english': 'english'}
 raw_text = ''
+currentCodeLanguageStopWords = ''
 
 with open('translation.json', 'r', encoding='UTF-8') as j:
     json_dictionary = json.load(j)
@@ -84,6 +98,37 @@ def evaluate_summary(summary,reference):
     return eval_score_df
 
 
+def text_downloader(raw_text, model):
+    b64 = base64.b64encode(raw_text.encode()).decode()
+    new_filename = "resume_{}_model_{}.txt".format(timestr, model)
+    st.markdown('### ' + translate('download') + ' ###')
+    href = f'<a href="data:file/txt;base64,{b64}" download="{new_filename}">💾 ' + translate('clique') + '!!</a>'
+    st.markdown(href, unsafe_allow_html=True)
+
+
+def plot_wordcloud(text):
+    global currentCodeLanguageStopWords
+    
+    # remove stopwords
+    if currentCodeLanguageStopWords == 'en':
+        stop_words = set(stopwords.words('english'))
+    else:
+        stop_words_initial = stopwords.words('portuguese')
+        stop_words_initial.extend(['a','e','i','o','u'])
+        stop_words = set(stop_words_initial)
+    word_tokens = word_tokenize(text.lower())
+    # print(stop_words)
+    filtered_sentence = [w for w in word_tokens if not w in stop_words] 
+    filtered_sentence = [] 
+    for w in word_tokens: 
+        if w not in stop_words: 
+            filtered_sentence.append(w)    
+    filtered_sentence = ' '.join(filtered_sentence)
+    my_wordcloud = WordCloud().generate(filtered_sentence)
+    fig = plt.figure()
+    plt.imshow(my_wordcloud, interpolation='bilinear')
+    plt.axis('off')
+    st.pyplot(fig)
 
 def main():
     global currenteCodeLanguage
@@ -137,30 +182,44 @@ def main():
 
             elif nomeArquivo[-1] == 'TXT':
                 conteudo = arquivo.read().decode('utf-8')
-                raw_text = conteudo
-                
 
-
-                
             else:
                 st.error(translate('tipoErrado'))
 
         st.write(translate('ou'))
         raw_text = st.text_area(translate('cole'), height=300, value=conteudo)
-        textLanguageChoose = st.radio(translate('escolhaTexto'), language).lower()
+
+        st.write(translate('escolhaTexto'))
+        textLanguageChoose = st.radio("", language).lower()
         #print(textLanguageChoose)
         textLanguage = languageNltk[textLanguageChoose]
         #print(textLanguage)
+
         qtdeFrases = st.slider(translate('qtdeFrases'), 3, 200, 5) 
+
+        st.write("Opções adicionais")
+        clean_numbers = st.checkbox(translate("removeNumeros"))
+        clean_especial = st.checkbox(translate("removeEspeciais"))
+        clean_urls = st.checkbox(translate("removeUrls"))
+        clean_emojis = st.checkbox(translate("removeEmojis"))
 
         #só mostra se tem conteúdo
     
         if st.button(translate('executar')):
             # só executa se tiver texto
             if len(raw_text) > 0:
-            
                 with st.beta_expander(translate('textoOriginal') + " (" + str(len(raw_text)) + " " + translate('caracteres')  + ")"):
                     st.write(raw_text)
+
+                # clean text according options
+                if clean_numbers:
+                    raw_text = nfx.remove_numbers(raw_text)
+                if clean_especial:
+                    raw_text = nfx.remove_special_characters(raw_text)
+                if clean_urls:
+                    raw_text = nfx.remove_urls(raw_text)
+                if clean_emojis:
+                    raw_text = nfx.remove_emojis(raw_text)
 
                 # layout
                 c1, c2 = st.beta_columns(2)
@@ -169,6 +228,8 @@ def main():
                     my_summary = sumy_summarizer(raw_text, textLanguage, qtdeFrases)
                     with st.beta_expander(translate('metodo1') + " (" + str(len(my_summary)) + " " + translate('caracteres')  + ")"):
                         st.write(my_summary)
+                        text_downloader(my_summary, 1)
+                        plot_wordcloud(raw_text)
                         # st.info("Rouge Score")
                         # eval_df = evaluate_summary(my_summary, raw_text)
                         # st.dataframe(eval_df.T)
@@ -200,6 +261,8 @@ def main():
                         if len(textoAdicional) > 0:
                             st.info(textoAdicional)
                         st.write(my_summary)
+                        text_downloader(my_summary, 2)
+                        plot_wordcloud(raw_text)
                         
             else:
                 st.error(translate('vazio'))
@@ -208,3 +271,6 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+
+# https://www.youtube.com/watch?v=KnaropswzoY&t=228s video with some instructions
