@@ -1,9 +1,10 @@
 # import Core Pkg
+from json import encoder
 import streamlit as st
 import streamlit.components.v1 as stc
 
 # additional pkgs / summarization pkgs
-# need: pip install gensim sumy gensim_sum_ext pandas altair seaborn rouge nltk PyPDF2
+# need: pip install gensim sumy gensim_sum_ext pandas altair seaborn rouge nltk PyPDF2 wordcloud
 
 # TextRank Algorithm
 from gensim.summarization import summarize
@@ -24,6 +25,8 @@ import pandas as pd
 import altair as alt
 import json
 import PyPDF2
+from tika import parser
+import fitz # PyMuPDF
 
 # valores iniciais ou fixos
 currenteCodeLanguage = 'pt'
@@ -58,7 +61,7 @@ st.set_page_config(page_title=translate('titulo'), page_icon='favicon.png', layo
 
 # passa javascript e estilos
 #stc.html('<script src="https://code.iconify.design/1/1.0.7/iconify.min.js"></script>')
-stc.html(hide_streamlit_style)
+#stc.html(hide_streamlit_style)
 st.markdown(hide_streamlit_style, unsafe_allow_html=True)
 
 
@@ -98,18 +101,49 @@ def main():
 
         arquivo = st.file_uploader(translate('arraste'),
             #type=['pdf', 'doc', 'txt', 'docx']
-            type=['pdf']
+            type=['pdf', 'txt']
         )
         if arquivo is not None:
             # read the content
             #st.write(type(arquivo))
             #st.write(dir(arquivo))
-            arquivoPDF = PyPDF2.PdfFileReader(arquivo, strict=False)
-            for i  in range(0, arquivoPDF.getNumPages()):
-                pagina = arquivoPDF.getPage(i)
-                conteudo += pagina.extractText()
-            raw_text = conteudo
-            #print(conteudo)
+            #st.write(arquivo.__format__)
+            nomeArquivo = arquivo.name.upper().split('.')
+            if nomeArquivo[-1] == 'PDF':
+                # arquivoPDF = PyPDF2.PdfFileReader(arquivo, strict=False)
+                # for i  in range(0, arquivoPDF.getNumPages()):
+                #     pagina = arquivoPDF.getPage(i)
+                #     conteudo += pagina.extractText()
+                # raw_text = conteudo
+                # safe_text = conteudo.encode('utf-8', errors='ignore')
+                # safe_text = str(safe_text).replace("\n", "").replace("\\", "")
+                # # print(safe_text)
+                # raw_text = safe_text
+                #print(conteudo)
+
+                # raw = parser.from_file(arquivo)
+                # print("TIKA")
+                # print(str(raw))
+                # print(raw['content'])
+                # print("TIKA")
+
+                # doc = fitz.open(arquivo)
+                # print(doc)
+
+                with open(arquivo, "rb") as f:
+                    base64_pdf = base64.b64encode(f.read()).decode('utf-8')
+                    pdf_display = f'<embed src="data:application/pdf;base64,{base64_pdf}" width="700" height="1000" type="application/pdf">' 
+                
+
+            elif nomeArquivo[-1] == 'TXT':
+                conteudo = arquivo.read().decode('utf-8')
+                raw_text = conteudo
+                
+
+
+                
+            else:
+                st.error(translate('tipoErrado'))
 
         st.write(translate('ou'))
         raw_text = st.text_area(translate('cole'), height=300, value=conteudo)
